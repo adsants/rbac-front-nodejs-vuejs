@@ -14,7 +14,9 @@ const map = {
   pencil: HI.PencilSquareIcon,
   trash: HI.TrashIcon,
   cog: HI.CogIcon,
-  logout: HI.ArrowRightOnRectangleIcon
+  logout: HI.ArrowRightOnRectangleIcon,  
+  bars: HI.Bars3Icon,        // <-- NEW
+  x: HI.XMarkIcon            // <-- NEW
 }
 const Comp = map[props.name] || HI.Square3Stack3DIcon
 </script>

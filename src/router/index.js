@@ -11,6 +11,7 @@ const RoleForm = () => import('../pages/RoleForm.vue')
 const MenusList = () => import('../pages/MenusList.vue')
 const MenuForm = () => import('../pages/MenuForm.vue')
 const RoleMenuForm = () => import('../pages/RoleMenuForm.vue')
+const Profile = () => import('../pages/Profile.vue');
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,6 +29,8 @@ const router = createRouter({
     { path: '/menus/new', component: MenuForm, meta: { requiresAuth: true } },
     { path: '/menus/:id', component: MenuForm, meta: { requiresAuth: true } },
     { path: '/role-menu', component: RoleMenuForm, meta: { requiresAuth: true } },
+    { path: '/profile', component: Profile, meta: { requiresAuth: true } },
+
   ]
 })
 

@@ -26,10 +26,14 @@
           <td class="td">{{ m.title }}</td>
           <td class="td">{{ m.path }}</td>
           <td class="td">{{ m.parent_id }}</td>
-          <td class="td">{{ m.sort }}</td>
-          <td class="td">
-            <RouterLink class="link mr-3" :to="`/menus/${m.id}`">Edit</RouterLink>
-            <button class="text-red-600 hover:underline" @click="removeRow(m)">Delete</button>
+          <td class="td">{{ m.sort }}</td>          
+          <td class="td" align="right">
+            <RouterLink class="link mr-3 inline-flex items-center gap-1" :to="`/menus/${m.id}`">
+              <IconHero name="pencil" /> Edit
+            </RouterLink>
+            <button class="text-red-600 hover:underline inline-flex items-center gap-1" @click="removeRow(m)">
+              <IconHero name="trash" /> Delete
+            </button>
           </td>
 
         </tr>
@@ -43,6 +47,9 @@
 import { ref, onMounted } from 'vue'
 import { api } from '../store/auth'
 import TablePagination from '../components/TablePagination.vue'
+import { useUiStore } from '../store/ui'
+import IconHero from '../components/IconHero.vue'
+const ui = useUiStore()
 
 const rows = ref([])
 const meta = ref({ page: 1, limit: 10, total: 0 })
@@ -54,16 +61,18 @@ async function fetchData(page = meta.value.page) {
   meta.value = data.meta
 }
 onMounted(() => fetchData())
-async function removeRow(m) {
-  if (!confirm(`Hapus menu "${m.title}"?`)) return
+
+async function removeRow(u) {
+  const ok = await ui.askConfirm({ title: 'Hapus Role', message: `Yakin hapus Menu "${u.title}"?` })
+  if (!ok) return
   try {
-    await api.delete(`/menus/${m.id}`)
+    await api.delete(`/menus/${u.id}`)
     const prev = rows.value.length === 1 && meta.value.page > 1
     await fetchData(prev ? meta.value.page - 1 : meta.value.page)
-    // Refresh sidebar agar langsung mengikuti perubahan menu
-    await auth.fetchMe()
+    ui.showToast({ type: 'success', message: 'User berhasil dihapus' })
   } catch (e) {
-    alert(e?.response?.data?.message || 'Gagal menghapus')
+    ui.showToast({ type: 'error', message: e?.response?.data?.message || 'Gagal menghapus' })
   }
 }
+
 </script>

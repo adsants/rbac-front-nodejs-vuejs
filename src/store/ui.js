@@ -5,7 +5,8 @@ let _resolve = null
 export const useUiStore = defineStore('ui', {
   state: () => ({
     toasts: [],
-    confirm: { show: false, title: 'Konfirmasi', message: '' }
+    confirm: { show: false, title: 'Konfirmasi', message: '' },
+    sidebarOpen: false
   }),
   actions: {
     showToast({ type = 'success', message = '', timeout = 2500 } = {}) {
@@ -19,6 +20,9 @@ export const useUiStore = defineStore('ui', {
       return new Promise((resolve) => { _resolve = resolve })
     },
     confirmYes() { this.confirm.show = false; if (_resolve) _resolve(true); _resolve = null },
-    confirmNo()  { this.confirm.show = false; if (_resolve) _resolve(false); _resolve = null }
+    confirmNo() { this.confirm.show = false; if (_resolve) _resolve(false); _resolve = null },
+    toggleSidebar() { this.sidebarOpen = !this.sidebarOpen }, 
+    openSidebar() { this.sidebarOpen = true },              
+    closeSidebar() { this.sidebarOpen = false }
   }
 })
