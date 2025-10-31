@@ -5,7 +5,14 @@
         <input class="input" v-model="q" placeholder="Search..." @keyup.enter="fetchData(1)" />
         <button class="btn-secondary" @click="fetchData(1)">Search</button>
       </div>
-      <RouterLink class="btn" to="/menus/new">Tambah</RouterLink>
+     
+        <RouterLink
+          to="/menus/new"
+          class="btn inline-flex items-center gap-2"
+          v-perm.disable="{ key:'menus', action:'can_create' }"
+        >
+          <IconHero name="plus" /> Tambah
+        </RouterLink>
     </div>
     <table class="table">
       <thead>
@@ -28,12 +35,20 @@
           <td class="td">{{ m.parent_id }}</td>
           <td class="td">{{ m.sort }}</td>          
           <td class="td" align="right">
-            <RouterLink class="link mr-3 inline-flex items-center gap-1" :to="`/menus/${m.id}`">
-              <IconHero name="pencil" /> Edit
-            </RouterLink>
-            <button class="text-red-600 hover:underline inline-flex items-center gap-1" @click="removeRow(m)">
-              <IconHero name="trash" /> Delete
-            </button>
+               <RouterLink
+              class="link mr-3 inline-flex items-center gap-1"
+              :to="`/menus/${m.id}`"
+              v-perm.disable="{ key:'menus', action:'can_update' }"
+            >Edit</RouterLink>
+
+            <!-- Delete: hide jika tak punya can_delete (atau pakai .disable) -->
+            <button
+              class="text-red-600 hover:underline inline-flex items-center gap-1"
+              @click="removeRow(u)"
+              v-perm.disable="{ key:'menus', action:'can_delete' }"
+            >Delete</button>
+
+
           </td>
 
         </tr>

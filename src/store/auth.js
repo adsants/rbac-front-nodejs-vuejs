@@ -14,6 +14,8 @@ export const useAuthStore = defineStore('auth', {
     loading: false,
     error: null
   }),
+
+  
   actions: {
     async fetchMe() {
       try {
@@ -46,6 +48,17 @@ export const useAuthStore = defineStore('auth', {
       await api.post('/auth/logout')
       this.user = null
       this.menus = []
+    },
+
+    hasPermission(key, action = 'can_read') {
+      const dfs = (nodes = []) => {
+        for (const n of nodes) {
+          if (n.key === key && Number(n[action]) === 1) return true
+          if (n.children && dfs(n.children)) return true
+        }
+        return false
+      }
+      return dfs(this.menus)
     }
   }
 })

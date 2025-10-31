@@ -5,9 +5,15 @@
         <input class="input" v-model="q" placeholder="Search..." @keyup.enter="fetchData(1)" />
         <button class="btn-secondary" @click="fetchData(1)">Search</button>
       </div>
-      <RouterLink class="btn inline-flex items-center gap-2" to="/users/new">
-        <IconHero name="plus" /> Tambah
-      </RouterLink>
+        <RouterLink
+          to="/users/new"
+          class="btn inline-flex items-center gap-2"
+          v-perm.disable="{ key:'users', action:'can_create' }"
+        >
+          <IconHero name="plus" /> Tambah
+        </RouterLink>
+
+
     </div>
     <table class="table">
       <thead>
@@ -20,12 +26,19 @@
           <td class="td">{{ u.email }}</td>
           <td class="td"><span class="badge">{{ u.role_name }}</span></td>
           <td class="td" align="right">
-            <RouterLink class="link mr-3 inline-flex items-center gap-1" :to="`/users/${u.id}`">
-              <IconHero name="pencil" /> Edit
-            </RouterLink>
-            <button class="text-red-600 hover:underline inline-flex items-center gap-1" @click="removeRow(u)">
-              <IconHero name="trash" /> Delete
-            </button>
+                <!-- Edit: disable jika tak punya can_update -->
+            <RouterLink
+              class="link mr-3 inline-flex items-center gap-1"
+              :to="`/users/${u.id}`"
+              v-perm.disable="{ key:'users', action:'can_update' }"
+            >Edit</RouterLink>
+
+            <!-- Delete: hide jika tak punya can_delete (atau pakai .disable) -->
+            <button
+              class="text-red-600 hover:underline inline-flex items-center gap-1"
+              @click="removeRow(u)"
+              v-perm.disable="{ key:'users', action:'can_delete' }"
+            >Delete</button>
           </td>
         </tr>
       </tbody>
